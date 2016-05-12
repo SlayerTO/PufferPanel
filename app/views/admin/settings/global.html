@@ -24,6 +24,18 @@
 		</fieldset>
 	</form>
 	<br />
+	<h3>Company Picture</h3><hr />
+	<form action="global/company" method="POST">
+		<fieldset>
+			<div class="input-group">
+				<input type="text" name="company_picture" class="form-control" value="{{ settings.company_picture }}" />
+				<span class="input-group-btn">
+					<input type="submit" value="Update" class="btn btn-primary btn-sm" />
+				</span>
+			</div>
+		</fieldset>
+	</form>
+	<br />
 	<h3>Global Settings</h3><hr />
 	<form action="global/general" method="POST">
 		<fieldset>

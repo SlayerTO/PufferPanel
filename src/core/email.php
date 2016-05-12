@@ -231,11 +231,22 @@ class Email {
 	 * @deprecated This is just a more or less glorified buildEmail
 	 */
 	public function generateLoginNotification($type, $vars) {
-
-		$find = array('{{ HOST_NAME }}', '{{ IP_ADDRESS }}', '{{ GETHOSTBY_IP_ADDRESS }}', '{{ DATE }}', '{{ MASTER_URL }}');
-		$replace = array(Settings::config()->company_name, $vars['IP_ADDRESS'], $vars['GETHOSTBY_IP_ADDRESS'], date('r', time()), Settings::config()->master_url);
-
-		$this->message = str_replace($find, $replace, $this->_readTemplate('login_'.$type));
+		
+		$this->message = str_replace(array(
+			'{{ HOST_NAME }}', 
+			'{{ IP_ADDRESS }}', 
+			'{{ GETHOSTBY_IP_ADDRESS }}', 
+			'{{ DATE }}', 
+			'{{ MASTER_URL }}', 
+			'{{ LOGO }}'
+			), array(
+			Settings::config()->company_name, 
+			$vars['IP_ADDRESS'], 
+			$vars['GETHOSTBY_IP_ADDRESS'], 
+			date('r', time()), 
+			Settings::config()->master_url, 
+			Settings::config()->master_url . Settings::config()->company_picture
+			), $this->_readTemplate('login_'.$type));
 
 		return $this;
 
@@ -250,7 +261,17 @@ class Email {
 	 */
 	public function buildEmail($tpl, array $data) {
 
-		$this->message = str_replace(array('{{ HOST_NAME }}', '{{ MASTER_URL }}', '{{ DATE }}'), array(Settings::config()->company_name, Settings::config()->master_url, date('j/F/Y H:i', time())), $this->_readTemplate($tpl));
+		$this->message = str_replace(array(
+			'{{ HOST_NAME }}', 
+			'{{ MASTER_URL }}', 
+			'{{ DATE }}', 
+			'{{ LOGO }}'
+			), array(
+			Settings::config()->company_name, 
+			Settings::config()->master_url, 
+			date('j/F/Y H:i', time()), 
+			Settings::config()->master_url . Settings::config()->company_picture
+			), $this->_readTemplate($tpl));
 
 		foreach($data as $key => $val) {
 			$this->message = str_replace('{{ '.$key.' }}', $val, $this->message);

@@ -120,6 +120,7 @@ function configureSite() {
     mysql -h ${mysqlHost} -P ${mysqlPort} -D ${mysqlDb} -u ${mysqlUser} --password="${mysqlPass}" -e "
         INSERT INTO acp_settings (setting_ref, setting_val) VALUES
             ('company_name', 'PufferPanel'),
+            ('company_picture', 'logo.png'),
             ('master_url', 'http://${siteUrl}/'),
             ('main_website', 'http://${siteUrl}/'),
             ('transport_token', NULL),

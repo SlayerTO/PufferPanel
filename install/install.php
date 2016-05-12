@@ -87,6 +87,7 @@ try {
 
 	$query = $mysql->prepare("INSERT INTO `acp_settings` (`setting_ref`, `setting_val`) VALUES
 				('company_name', :cname),
+				('company_picture', :cpic),
 				('master_url', :murl),
 				('assets_url', :aurl),
 				('main_website', :mwebsite),
@@ -102,6 +103,7 @@ try {
     $params['siteUrl'] = preg_replace("(^https?:\/\/)", "", $params['siteUrl']);
 	$query->execute(array(
 		':cname' => $params['companyName'],
+		':cpic' => $params['companyPicture'],
 		':murl' => 'http://' . $params['siteUrl'] . '/',
 		':mwebsite' => 'http://' . $params['siteUrl'] . '/',
 		':aurl' => 'http://' . $params['siteUrl'] . '/assets/'
