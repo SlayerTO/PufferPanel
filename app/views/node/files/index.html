@@ -2,157 +2,195 @@
 
 {% block title %}File Manager{% endblock %}
 
-{% block scripts %}
-	{{ parent() }}
-	<script type="text/javascript" src="{{ settings.assets_url }}javascript/jquery.redirect.min.js"></script>
-{% endblock %}
-
-{% block servername %}
-<ul class="nav navbar-nav">
-	<li class="active"><a>{{ server.name }}</a></li>
-</ul>
-{% endblock %}
-
-{% block sidebar %}
-<div class="list-group">
-	<a href="#" class="list-group-item list-group-item-heading"><strong>{{ lang.sidebar_acc_actions }}</strong></a>
-	<a href="../../account.php" class="list-group-item">{{ lang.sidebar_settings }}</a>
-	<a href="../../totp.php" class="list-group-item">TOTP {{ lang.sidebar_settings }}</a>
-	<a href="../../servers.php" class="list-group-item">{{ lang.sidebar_servers }}</a>
-</div>
-<div class="list-group">
-	<a href="#" class="list-group-item list-group-item-heading"><strong>{{ lang.sidebar_server_acc }}</strong></a>
-	<a href="../index.php" class="list-group-item">{{ lang.sidebar_overview }}</a>
-	<a href="../console.php" class="list-group-item">{{ lang.sidebar_console }}</a>
-	<a href="index.php" class="list-group-item active">{{ lang.sidebar_files }}</a>
-</div>
-<div class="list-group">
-	<a href="#" class="list-group-item list-group-item-heading"><strong>{{ lang.sidebar_server_sett }}</strong></a>
-
-	<a href="../settings.php" class="list-group-item">{{ lang.sidebar_manage }}</a>
-	<a href="../plugins/index.php" class="list-group-item">{{ lang.sidebar_plugins }}</a>
-</div>
-{% endblock %}
-
 {% block content %}
-<div class="col-9" id="internal_alert">
-	<div class="alert alert-info">
-		<i class="fa fa-spinner fa-spin"></i> {{ lang.node_files_loading }}
+	{% if flash.info is defined %}
+	<div class="col-md-9">
+		{{ flash.info.0|raw }}
 	</div>
-</div>
-<div class="row">
-	<div class="col-9">
+	{% endif %}
+	<div class="col-md-9" id="internal_alert">
+		<div class="alert alert-info">
+			<i class="fa fa-spinner fa-spin"></i> {{ l.render('node.files.loading') }}
+		</div>
+	</div>
+	<div class="col-md-9">
 		<div class="files_loading_box"><i class="fa fa-refresh fa-spin" id="position_me"></i></div>
 	</div>
-	<div class="col-9" id="load_files"></div>
-</div>
+	<div class="col-md-9" id="load_files"></div>
 <script type="text/javascript">
 $(window).load(function(){
-    $.urlParam = function(name, url){
-		 var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(decodeURIComponent(url));
-		 if (results==null){
-		     return null;
-         }else{
-		     return results[1] || 0;
-		 }
-    }
-    var doneLoad = false;
-    function handleLoader(show){
+	$("#sidebar_links").find("a[href='/node/files']").addClass('active');
+	$.urlParam = function(name, url){
+		var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(decodeURIComponent(url));
+		if (results==null){
+			return null;
+		}else{
+			return results[1] || 0;
+		}
+	}
+	var doneLoad = false;
+	function handleLoader(show){
+		if(show === true){
+			var height = $("#load_files").height();
+			var width = $(".files_loading_box").width();
+			var center_height = (height / 2) - 30;
+			var center_width = (width / 2) - 30;
+			$("#position_me").css({"top": center_height, "left": center_width, "font-size": "60px"});
+			$(".files_loading_box").css("height", (height + 5)).fadeIn();
+		}else{
+			$(".files_loading_box").fadeOut(100);
+		}
+	}
+	function newLoad(){
+		$("a.load_new").click(function(event){
+			event.preventDefault();
+			handleLoader(true);
+			if($.urlParam('dir', $(this).attr("href")) != null){
+				var dir = $.urlParam('dir', $(this).attr("href"));
+				$.ajax({
+					type: "POST",
+					url: '/node/ajax/files/directory',
+					data: {'dir': dir},
+					success: function(data) {
+						handleLoader(false);
+						$("#load_files").slideUp(function(){
+							$("#load_files").html(data);
+							$("#load_files").slideDown();
+							newLoad();
+						});
+					}
+				});
+			}else{
+				$.ajax({
+					type: "POST",
+					url: '/node/ajax/files/directory',
+					data: {},
+					success: function(data) {
+						handleLoader(false);
+						$("#load_files").slideUp(function(){
+							$("#load_files").html(data);
+							$("#load_files").slideDown();
+							newLoad();
+						});
+					}
+				});
+			}
+		});
+		$(".delete_file").click(function(e){
+			e.preventDefault();
+			var clicked = $(this); //Fixes some strange bug going on
+			var deleteItemPath = clicked.attr("href");
 
-    	if(show === true){
-    		var height = $("#get_height").height();
-    		var width = $(".files_loading_box").width();
-    		var center_height = (height / 2) - 15;
-    		var center_width = (width / 2) - 15;
-    		$("#position_me").css({"top": center_height, "left": center_width});
-    		$(".files_loading_box").css("height", (height + 5)).fadeIn();
-    	}else{
-    		$(".files_loading_box").fadeOut();
-    	}
+			if (!confirm("Are you sure you want to delete " + deleteItemPath + "?")) {
+				return;
+			}
 
-    }
-    function newLoad(){
-        $("a.load_new").click(function(event){
-            event.preventDefault();
-            handleLoader(true);
-	        if($.urlParam('dir', $(this).attr("href")) != null){
-	            var dir = $.urlParam('dir', $(this).attr("href"));
-	            $.ajax({
-	                type: "POST",
-	                url: '../ajax/files/list_dir.php',
-	                data: {'dir': dir},
-	                success: function(data) {
-	                    $("#load_files").slideUp(function(){
-	                        $("#load_files").html(data);
-	                        handleLoader(false);
-	                        $("#load_files").slideDown();
-	                        newLoad();
-	                    });
-	                }
-	            });
-	        }else{
-	            $.ajax({
-	                type: "POST",
-	                url: '../ajax/files/list_dir.php',
-	                data: {},
-	                success: function(data) {
-	                    $("#load_files").slideUp(function(){
-	                        $("#load_files").html(data);
-	                        handleLoader(false);
-	                        $("#load_files").slideDown();
-	                        newLoad();
-	                    });
-	            	}
-	            });
-	        }
-        });
-        $("a.edit_file").click(function(event){
-            event.preventDefault();
-            var file = $.urlParam('file', $(this).attr("href"));
-            $().redirect('edit.php', {'file': file});
-        });
-    }
-    function firstLoad() {
-    	$("#loading_dir").fadeIn(200);
+			$.ajax({
+				type: "POST",
+				url: '/node/ajax/files/delete',
+				data: {
+					'deleteItemPath': deleteItemPath
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert(jqXHR.responseText);
+				},
+				success: function(data) {
+					if(data != "ok") {
+						alert(data);
+					}else{
+						clicked.parent().parent().parent().parent().fadeOut();
+					}
+				}
+			});
+		});
+		$(".zip_file").click(function(e){
+			e.preventDefault();
+			clicked = $(this); //Fixes some strange bug going on
+			var zipItemPath = clicked.attr("href");
+			$.ajax({
+				type: "POST",
+				url: '/node/ajax/files/compress',
+				data: {
+					'zipItemPath': zipItemPath
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert(jqXHR.responseText);
+				},
+				success: function(data) {
+					if(data != "ok") {
+						alert(data);
+					} else {
+						firstLoad();
+					}
+				}
+			});
+		});
+		$(".unzip_file").click(function(e){
+			e.preventDefault();
+			clicked = $(this); //Fixes some strange bug going on
+			var unzipItemPath = clicked.attr("href");
+			$.ajax({
+				type: "POST",
+				url: '/node/ajax/files/compress',
+				data: {
+					'unzipItemPath': unzipItemPath
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert(jqXHR.responseText);
+				},
+				success: function(data) {
+					if(data != "ok") {
+						alert(data);
+					} else {
+						firstLoad();
+					}
+				}
+			});
+		});
+	}
+	function firstLoad() {
+		$("#loading_dir").fadeIn(200);
 		$("#internal_alert").slideDown();
-        if($.urlParam('dir', $(location).attr('href')) != null && doneLoad === false){
-        	var dir = $.urlParam('dir', $(location).attr('href'));
+		if($.urlParam('dir', $(location).attr('href')) != null && doneLoad === false){
+			var dir = $.urlParam('dir', $(location).attr('href'));
 			$("#loading_dir").fadeIn(200);
-        	$.ajax({
-        	    type: "POST",
-        	    url: '../ajax/files/list_dir.php',
-        	    data: {'dir': dir},
-        	    success: function(data) {
-        	        $("#load_files").slideUp(function(){
-        	            $("#load_files").html(data);
-        	            $("#internal_alert").slideUp();
-        	            $("#load_files").slideDown();
-        	            $("#loading_dir").fadeOut(200);
-        	            doneLoad = true;
-        	            newLoad();
-        	        });
-        	    }
-        	});
-        }else{
-	        $("#loading_dir").fadeIn(200);
-	        $.ajax({
-	            type: "POST",
-	            url: '../ajax/files/list_dir.php',
-	            data: {},
-	            success: function(data) {
-	                $("#load_files").slideUp(function(){
-	                    $("#load_files").html(data);
-	                    $("#internal_alert").slideUp();
-	                    $("#load_files").slideDown();
-	                    $("#loading_dir").fadeOut(200);
-	                    doneLoad = true;
-	                    newLoad();
-	                });
-	            }
-	        });
-        }
-    }
-    firstLoad();
+			$.ajax({
+				type: "POST",
+				url: '/node/ajax/files/directory',
+				data: {'dir': dir},
+				success: function(data) {
+					$("#load_files").slideUp(function(){
+						$("#load_files").html(data);
+						$("#internal_alert").delay(50).slideUp(function() {
+							$("#load_files").slideDown();
+							$("#loading_dir").fadeOut(200);
+							doneLoad = true;
+							newLoad();
+						});
+					});
+				}
+			});
+		}else{
+			$("#loading_dir").fadeIn(200);
+			$.ajax({
+				type: "POST",
+				url: '/node/ajax/files/directory',
+				data: {},
+				success: function(data) {
+					$("#load_files").slideUp(function(){
+						$("#load_files").html(data);
+						$("#internal_alert").delay(50).slideUp(function() {
+							$("#load_files").slideDown();
+							$("#loading_dir").fadeOut(200);
+							doneLoad = true;
+							newLoad();
+						});
+					});
+				}
+			});
+		}
+	}
+	firstLoad();
 });
 </script>
 {% endblock %}

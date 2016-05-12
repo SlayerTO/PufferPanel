@@ -1,33 +1,33 @@
-[![Dependency Status](https://gemnasium.com/DaneEveritt/PufferPanel.svg)](https://gemnasium.com/DaneEveritt/PufferPanel)
+# PufferPanel [![Release](https://img.shields.io/github/release/PufferPanel/PufferPanel.svg?maxAge=3600)](https://github.com/PufferPanel/PufferPanel/releases) [![Downloads](https://img.shields.io/github/downloads/PufferPanel/PufferPanel/total.svg?maxAge=3600)](https://github.com/PufferPanel/PufferPanel/releases)
 
-# About PufferPanel
-PufferPanel was created to be an open-source replacement for Multicraft. We are currently licensed under a [GPL-v3 license](https://raw.github.com/DaneEveritt/PufferPanel/master/LICENSE).
+[Website](http://pufferpanel.com) |
+[Community Forums](https://community.pufferpanel.com) |
+[Community Chat](https://webchat.esper.net/?nick=&channels=pufferpanel) |
+[Documentation](http://www.pufferpanel.com/docs) |
+[Translations](https://www.transifex.com/pufferpanel/pufferpanel/)
 
-Downloads of PufferPanel can be found [here](https://github.com/DaneEveritt/PufferPanel/releases). You can contact us on IRC (irc.esper.net) in #pufferpanel, please read the wiki first, and be descriptive when you ask for help.
+#### PufferPanel is currently undergoing many changes. Please read our [announcements](https://community.pufferpanel.com/category/1/announcements) for more information.
 
-If you want to see what PufferPanel looks like you can check out our topic on the [Minecraft Forums](http://www.minecraftforum.net/forums/servers/minecraft-server-hosting/hosting-discussion/569432-introducing-pufferpanel-the-open-source-multicraft/).
+## What is PufferPanel?
+PufferPanel is a web-based Game Server Management System. PufferPanel allows you to manage multiple different game servers all from one central location. You can give other users their own servers or allow them access to your servers. You can find pictures of our interfaces in our [General User Feature Tour](http://www.pufferpanel.com/docs/general-user-feature-tour) or in our [Administrative Feature Tour](http://www.pufferpanel.com/docs/administrative-feature-tour).
 
-# Support & Installing
-If you need help at in point with PufferPanel you can contact us in IRC, or you can get help on our [Official Support Forums](http://pufferpanel.com).
+## Installation
+#### Please follow the installation guide for PufferPanel located [here](http://www.pufferpanel.com/docs/getting-started).
 
-Check out our [wiki](https://github.com/DaneEveritt/PufferPanel/wiki) for guides to set up PufferPanel.
+## What's different about PufferPanel?
+In addition to being a free and open source project, PufferPanel provides an easy to use interface for everyone from individual users to large networks or companies. We strive to create a friendly community and we would love for you to join us.
 
-### A Word of Warning
-**PufferPanel has not been throughly tested for security holes**. While we endeavour to ensure that all code we push is secure, we can not promise that something may have been missed. Due to the open-source nature of PufferPanel it is possible for others to see the code and look for holes. We encourage anyone who finds a hole to immediately report it to us so we can do everything in our power to fix it.
+### Scales
+PufferPanel works with the [Scales](https://github.com/PufferPanel/Scales) daemon, which supports a variety of games including Minecraft, PocketMine, and SRCDS. PufferPanel creates an automatic deployment script when creating a node that will install Scales for you. Please visit the [Scales documentation](http://scales.pufferpanel.com/docs) to learn more.
 
-Please do not run PufferPanel on a live environment at this stage in its development. *We can not be held responsible for the potential loss, modification, or leaking of any client data, files, or other information.*
+## Having issues or want to help?
+If you need help with PufferPanel or you'd like to help out you can contact us on IRC (irc.esper.net #pufferpanel) or ask a question on our [Community Support Forums](https://community.pufferpanel.com). Check out our [Documentation](http://www.pufferpanel.com/docs) for guides on how to install, update, and manage PufferPanel.
 
-# Development Support
-Support for PufferPanel comes from [Fishbans](http://fishbans.com) and **OSTKCabal** who have graciously provided us with development servers.
+### Copyright Notices
+Some Javascript and CSS used within the panel is licensed under a MIT, Apache 2.0, or GPL license. Please check their header files for information.
 
-# Special Thanks
-* **[GSD](https://github.com/gametainers/gsd)** - Special thanks to Gametainers for creating and licensing GSD for use by PufferPanel. This is the core software daemon that we use to control server actions and quickly display data. (v0.5.5-beta and above)
-* **[xPaw](http://xpaw.ru)** — A special thanks to xPaw for allowing PufferPanel to use the [Minecraft Query](https://github.com/xPaw/PHP-Minecraft-Query) class that he developed. This code allows us to access server information such as version, players online, and more directly from the panel without any additional configuration needed on your end. (v0.5.0.1-beta and below)
-* **[FontAwesome.io](http://fontawesome.io)** — Mad props to the people who created this wonderful open-source icon-set that we take advantage of in PufferPanel.
-* **[puffrfish](https://github.com/puffrfish)** — A very special thank you to puffrfish who had the idea almost two years ago to create PufferPanel for a hosting buisness. Without his reassurance, ideas, and determination this panel never would have made it off the ground and gotten to the point it has made it.
+Some images used within PufferPanel are Copyright (c) their respective owners.
 
-# Additional Thanks
-An additional shout-out to the folks below who have provided countless hours of development help, suggestions, and motivation.
-* [nasonfish](https://github.com/nasonfish)
-* [clone1018](https://github.com/clone1018)
-* [cookednoodles](https://github.com/cookednoodles)
+`/app/assets/images/403.jpg` is licensed under a [CC BY 2.0](http://creativecommons.org/licenses/by/2.0/) by [BigTallGuy](http://flickr.com/photos/bigtallguy/)
+
+`/app/assets/images/404.jpg` is licensed under a [CC BY-SA 2.0](http://creativecommons.org/licenses/by-sa/2.0/) by [nicsuzor](http://flickr.com/photos/nicsuzor/)
